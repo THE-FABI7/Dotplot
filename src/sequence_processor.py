@@ -8,7 +8,7 @@ class SequenceProcessor:
             sequences.append(str(record.seq))
         return "".join(sequences)
 
-    def save_results_to_file(self, results, file_name="utils/results.txt"):
+    def save_results_to_file(self, results, file_name):
         with open(file_name, "w") as file:
             for result in results:
                 file.write(str(result) + "\n")
