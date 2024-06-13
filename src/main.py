@@ -38,8 +38,8 @@ def main():
         sequence_processor.save_results_to_file([f"File loading time: {load_time}"], "utils/load_time.txt")
 
         # Truncate sequences for demonstration
-        sequence1 = sequence1[:20000]
-        sequence2 = sequence2[:20000]
+        sequence1 = sequence1[:7000]
+        sequence2 = sequence2[:7000]
         
     
     #TODO: secuencial 9k
@@ -65,8 +65,8 @@ def main():
         accelerations = performance_analysis.acceleration(times)
         efficiencies = performance_analysis.efficiency(accelerations, num_threads)
         graphical_output.draw_graphic_multiprocessing(times, accelerations, efficiencies, num_threads)
-        graphical_output.draw_dotplot(multiprocessing_dotplot[:9000, :9000], "imagenes/multiprocessing/dotplot_multiprocessing.png")
-        image_filter.apply_filter(multiprocessing_dotplot[:9000, :9000], "imagenes/multiprocessing/filtered_dotplot_multiprocessing.png")
+        graphical_output.draw_dotplot(multiprocessing_dotplot[:7000, :7000], "imagenes/multiprocessing/dotplot_multiprocessing.png")
+        image_filter.apply_filter(multiprocessing_dotplot[:7000, :7000], "imagenes/multiprocessing/filtered_dotplot_multiprocessing.png")
         print(times)
         sequence_processor.save_results_to_file(f"Multiprocessing times: {times}", "utils/multiprovessing_results.txt")
 
