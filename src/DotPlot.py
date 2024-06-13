@@ -31,7 +31,7 @@ class DotPlot:
                     dotplot[i, j] = 0
         return dotplot
     
-    # Función para convertir secuencia de ADN a una representación numérica
+    #Función para convertir secuencia de ADN a una representación numérica
     def convertir_a_numerico(self,secuencia):
         mapa = {'A': 1, 'T': 2, 'C': 3, 'G': 4}
         return np.array([mapa[base] for base in secuencia], dtype=np.uint8)
