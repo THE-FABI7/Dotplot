@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--sequential', action='store_true', help='Run in sequential mode')
     parser.add_argument('--multiprocessing', action='store_true', help='Run using multiprocessing')
     parser.add_argument('--mpi', action='store_true', help='Run using MPI')
+    parser.add_argument('--pycuda', action='store_true', help='Run using CUDA')
     parser.add_argument('--num_processes', dest='num_processes', type=int, nargs='+',
                         default=[4], help='Número de procesos para la opción MPI')
     args = parser.parse_args()
@@ -37,19 +38,21 @@ def main():
         sequence_processor.save_results_to_file([f"File loading time: {load_time}"], "utils/load_time.txt")
 
         # Truncate sequences for demonstration
-        sequence1 = sequence1[:1000]
-        sequence2 = sequence2[:1000]
+        sequence1 = sequence1[:20000]
+        sequence2 = sequence2[:20000]
         
     
+    #TODO: secuencial 9k
     if args.sequential:
         # Perform sequential dotplot calculation
         start_time = time.time()
         sequential_dotplot = dot_plot.dotplot_sequential(sequence1, sequence2)
         elapsed_time = time.time() - start_time
-        graphical_output.draw_dotplot(sequential_dotplot[:600, :600], "imagenes/secuencial/dotplot_sequential.png")
-        image_filter.apply_filter(sequential_dotplot[:600, :600], "imagenes/secuencial/filtered_dotplot_sequential.png")
+        graphical_output.draw_dotplot(sequential_dotplot[:9000, :9000], "imagenes/secuencial/dotplot_sequential.png")
+        image_filter.apply_filter(sequential_dotplot[:9000, :9000], "imagenes/secuencial/filtered_dotplot_sequential.png")
         sequence_processor.save_results_to_file([f"Sequential run time: {elapsed_time}"], "utils/secuencial_times.txt")
-    
+     
+    #TODO: multiprocessing 8k 
     if args.multiprocessing:
         # Perform multiprocessing dotplot calculation
         num_threads = [1, 2, 4, 8]  # Example thread counts
@@ -62,21 +65,33 @@ def main():
         accelerations = performance_analysis.acceleration(times)
         efficiencies = performance_analysis.efficiency(accelerations, num_threads)
         graphical_output.draw_graphic_multiprocessing(times, accelerations, efficiencies, num_threads)
-        graphical_output.draw_dotplot(multiprocessing_dotplot[:600, :600], "imagenes/multiprocessing/dotplot_multiprocessing.png")
-        image_filter.apply_filter(multiprocessing_dotplot[:600, :600], "imagenes/multiprocessing/filtered_dotplot_multiprocessing.png")
+        graphical_output.draw_dotplot(multiprocessing_dotplot[:9000, :9000], "imagenes/multiprocessing/dotplot_multiprocessing.png")
+        image_filter.apply_filter(multiprocessing_dotplot[:9000, :9000], "imagenes/multiprocessing/filtered_dotplot_multiprocessing.png")
         print(times)
         sequence_processor.save_results_to_file(f"Multiprocessing times: {times}", "utils/multiprovessing_results.txt")
 
+    ##TODO: MPI 16k
     if args.mpi:
         # Perform MPI dotplot calculation
         mpi_dotplot = dot_plot.parallel_mpi_dotplot(sequence1, sequence2)
-        graphical_output.draw_dotplot(mpi_dotplot[:600, :600], "imagenes/mpi/dotplot_mpi.png")
+        graphical_output.draw_dotplot(mpi_dotplot[:25000, :25000], "imagenes/mpi/dotplot_mpi.png")
         # graphical_output.draw_graphic_mpi(times, accelerations, efficiencies, num_threads)
         print("Tipo de datos antes de aplicar el filtro:", mpi_dotplot.dtype)
         mpi_dotplot = mpi_dotplot.astype(np.float32) 
-        image_filter.apply_filter(mpi_dotplot[:600, :600], "imagenes/mpi/filtered_dotplot_mpi.png")
+        image_filter.apply_filter(mpi_dotplot[:25000, :25000], "imagenes/mpi/filtered_dotplot_mpi.png")
         sequence_processor.save_results_to_file(["MPI results placeholder"], "utils/mpi_results.txt")
-
+    
+    if args.cuda:
+         # Perform CUDA dotplot calculation
+        CUDA_dotplot = dot_plot.dotplot_CUDA(sequence1, sequence2)
+        graphical_output.draw_dotplot(CUDA_dotplot[:5000, :5000], "imagenes/CUDA/dotplot_CUDA.png")
+        # graphical_output.draw_graphic_mpi(times, accelerations, efficiencies, num_threads)
+        print("Tipo de datos antes de aplicar el filtro:", CUDA_dotplot.dtype)
+        CUDA_dotplot = CUDA_dotplot.astype(np.int16) 
+        image_filter.apply_filter(CUDA_dotplot[:5000, :5000], "imagenes/CUDA/filtered_dotplot_CUDA.png")
+        sequence_processor.save_results_to_file(["CUDA results placeholder"], "utils/CUDA_results.txt")
+        
+    
     
 if __name__ == "__main__":
     main()
