@@ -73,7 +73,16 @@ def main():
 
             if args.mpi:
                 try:
-                    mpi_dotplot = dot_plot.parallel_mpi_dotplot(sequence1, sequence2)
+                    num_threads = [1, 2, 4, 8]
+                    times = []
+                    for threads in num_threads:
+                        start_time = time.time()
+                        mpi_dotplot = dot_plot.parallel_mpi_dotplot(sequence1, sequence2)
+                        elapsed_time = time.time() - start_time
+                        times.append(elapsed_time)
+                    accelerations = performance_analysis.acceleration(times)
+                    efficiencies = performance_analysis.efficiency(accelerations, num_threads)
+                    graphical_output.draw_graphic_multiprocessing(times, accelerations, efficiencies, num_threads)
                     graphical_output.draw_dotplot(mpi_dotplot[:25000, :25000], "imagenes/mpi/dotplot_mpi.png")
                     image_filter.apply_filter(mpi_dotplot[:25000, :25000], "imagenes/mpi/filtered_dotplot_mpi.png")
                     sequence_processor.save_results_to_file(["MPI results placeholder"], "utils/mpi_results.txt")
