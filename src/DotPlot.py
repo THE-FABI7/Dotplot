@@ -108,7 +108,7 @@ class DotPlot:
         for i in tqdm(range(len(chunks[rank]))):
             for j in range(len(sequence2)):
                 if sequence1[chunks[rank][i]] == sequence2[j]:
-                    if (i == j):
+                    if (i == j):    
                         dotplot[i, j] = np.float16(1.0)
                     else:
                         dotplot[i, j] = np.float16(0.6)

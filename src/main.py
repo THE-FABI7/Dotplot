@@ -8,6 +8,7 @@ from performance_analysis import PerformanceAnalysis
 from sequence_processor import SequenceProcessor
 
 def main():
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('--file1', type=str, help='Query sequence in FASTA format')
     parser.add_argument('--file2', type=str, help='Subject sequence in FASTA format')

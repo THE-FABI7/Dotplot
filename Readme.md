@@ -3,5 +3,7 @@
 
 2. Instala el paquete `virtualenv` con pip, el administrador de paquetes de Python. Abre tu terminal y ejecuta el siguiente comando:
 
+# 
+
 ```bash
 python -m ven myenv 
